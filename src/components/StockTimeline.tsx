@@ -291,7 +291,7 @@ class StockTimeline extends Component<Props, State> {
             x: transaction.date.valueOf(),
             title: isBuySell ? Math.round(transaction.shares!) : type.charAt(0).toUpperCase(),
             text: isBuySell
-              ? `${_.startCase(type)}: ${transaction.shares}@${transaction.price}`
+              ? `${_.startCase(type)}: ${transaction.shares} @ ${transaction.price}`
               : `${_.startCase(type)}: $${formatCurrency(transaction.amount, 2)}`,
           };
         }),
@@ -369,10 +369,10 @@ class StockTimeline extends Component<Props, State> {
                 height: 300,
               },
               subtitle: {
-                text: undefined,
+                text: 'Hello',
               },
               navigator: {
-                enabled: false,
+                enabled: true,
               },
             },
           },

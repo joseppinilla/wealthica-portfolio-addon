@@ -345,30 +345,15 @@ class App extends Component<Props, State> {
                 </p>
               </>
             )}
-
             {this.state.isLoadingOnUpdate && (
               <Flex width={1} justifyContent="center" alignItems="center">
                 <Loader type="ThreeDots" color="#7f3eab" height="30" width="75" />
               </Flex>
             )}
-            <DepositVsPortfolioValueTimeline
-              portfolios={this.state.portfolios}
-              isPrivateMode={this.state.privateMode}
-            />
+            <HoldingsCharts positions={this.state.positions} accounts={this.state.accounts} isPrivateMode={this.state.privateMode} addon={this.state.addon}/>
+            <DepositVsPortfolioValueTimeline portfolios={this.state.portfolios} isPrivateMode={this.state.privateMode} />
             <ProfitLossPercentageTimeline portfolios={this.state.portfolios} isPrivateMode={this.state.privateMode} />
             <ProfitLossTimeline portfolios={this.state.portfolios} isPrivateMode={this.state.privateMode} />
-            {!!this.state.positions.length && (
-              <>
-                <HoldingsCharts
-                  positions={this.state.positions}
-                  accounts={this.state.accounts}
-                  isPrivateMode={this.state.privateMode}
-                  addon={this.state.addon}
-                />
-                {/* <Earnings positions={this.state.positions} /> */}
-                {/* <HoldingsTable positions={this.state.positions} isPrivateMode={this.state.privateMode} /> */}
-              </>
-            )}
           </>
         ) : (
           <div className="App-header">

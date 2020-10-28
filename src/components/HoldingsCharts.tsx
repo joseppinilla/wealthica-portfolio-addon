@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Position, Account } from '../types';
 import Collapsible from 'react-collapsible';
-import { getSymbol, formatCurrency, getURLParams, formatMoney } from '../utils';
+import { getSymbol, formatCurrency, formatMoney } from '../utils';
 import Charts from './Charts';
 import moment from 'moment';
 import _ from 'lodash';
@@ -386,30 +386,6 @@ export default class HoldingsCharts extends Component<Props, State> {
     };
   };
 
-  getPortfolioVisualizerLink() {
-    const marketValue = this.props.positions.reduce((sum, position) => {
-      return sum + position.market_value;
-    }, 0);
-
-    let remainingWeightage = 100;
-    const params = getURLParams(
-      this.props.positions.reduce((hash, position, index) => {
-        // symbol1=QD&allocation1_1=1&
-        // symbol2=TTD&allocation2_1=15
-        let weightage = Number(((position.market_value / marketValue) * 100).toFixed(1));
-        remainingWeightage -= weightage;
-        remainingWeightage = Number(remainingWeightage.toFixed(1));
-        if (index + 1 == this.props.positions.length) {
-          weightage += remainingWeightage;
-        }
-        hash[`symbol${index + 1}`] = getSymbol(position.security);
-        hash[`allocation${index + 1}_1`] = weightage;
-        return hash;
-      }, {}),
-    );
-    return `https://www.portfoliovisualizer.com/backtest-portfolio?s=y&timePeriod=4&initialAmount=10000&annualOperation=0&annualAdjustment=0&inflationAdjusted=true&annualPercentage=0.0&frequency=4&rebalanceType=1&showYield=false&reinvestDividends=true&${params}#analysisResults`;
-  }
-
   renderStockTimeline() {
     if (!this.state.timelineSymbol) {
       return <></>;
@@ -450,7 +426,7 @@ export default class HoldingsCharts extends Component<Props, State> {
         <Select
           showSearch
           value={this.state.timelineSymbol}
-          placeholder="Enter a stock, e.g: FB, SHOP.TO"
+          placeholder="Enter a stock symbol"
           showArrow
           style={{ width: '100%' }}
           onChange={symbol => this.setState({ timelineSymbol: symbol })}
@@ -482,7 +458,6 @@ export default class HoldingsCharts extends Component<Props, State> {
           <Charts
             options={this.getOptions({
               yAxisTitle: 'Market Value ($)',
-              subtitle: '(click on a stock to view transactions)',
               series: [positionSeries[0]],
               drilldown: false,
             })}
@@ -492,7 +467,6 @@ export default class HoldingsCharts extends Component<Props, State> {
             <Flex width={[1, 1, 2 / 3]} height="100%" justifyContent="center">
               <Charts
                 options={this.getOptions({
-                  subtitle: '(click on a stock to view timeline and transactions)',
                   series: [positionSeries[1]],
                 })}
               />
@@ -505,20 +479,6 @@ export default class HoldingsCharts extends Component<Props, State> {
 
           {this.renderStockTimeline()}
 
-          <div className="center">
-            <div
-              className="button"
-              onClick={() => {
-                window.open(this.getPortfolioVisualizerLink(), '_blank');
-              }}
-            >
-              Portfolio Visualizer
-            </div>
-          </div>
-        </Collapsible>
-
-        <Collapsible trigger="USD/CAD Composition" open>
-          <Charts options={this.getOptions({ title: 'USD/CAD Composition', series: [this.getUSDCADSeries()] })} />
         </Collapsible>
 
         <Collapsible trigger="Top Losers/Gainers Chart" open>
