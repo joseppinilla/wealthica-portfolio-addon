@@ -15,7 +15,6 @@ import {
 import './App.css';
 import './Collapsible.css';
 import DepositVsPortfolioValueTimeline from './components/DepositsVsPortfolioValueTimeline';
-import Earnings from './components/Earnings';
 import HoldingsCharts from './components/HoldingsCharts';
 import ProfitLossPercentageTimeline from './components/ProfitLossPercentageTimeline';
 import ProfitLossTimeline from './components/ProfitLossTimeline';
@@ -366,7 +365,7 @@ class App extends Component<Props, State> {
                   isPrivateMode={this.state.privateMode}
                   addon={this.state.addon}
                 />
-                <Earnings positions={this.state.positions} />
+                {/* <Earnings positions={this.state.positions} /> */}
                 {/* <HoldingsTable positions={this.state.positions} isPrivateMode={this.state.privateMode} /> */}
               </>
             )}
